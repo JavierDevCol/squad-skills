@@ -34,7 +34,7 @@
         - `refactor:` — refactorización
         - `docs:` — documentación
         - `chore:` — tareas de mantenimiento
-    Simepre mostrar preview al usuario para su aprobacion.
+    Simepre mostrar preview (titulo y descripcion) al usuario para su aprobacion.
 
 ## Sincronización con `git-doc-sync`
     Si se crea o modifica un archivo en `Doc_BancaPorWhatsapp`:
