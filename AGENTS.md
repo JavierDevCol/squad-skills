@@ -20,15 +20,15 @@ Cuando se solicite crear una rama:
    hu-[ID]-[descripcion-kebab-case]
    ```
 
-### Commit inicial
+### Commit inicial [OBLIGATORIO]
 
-Luego de crear la rama, realizar un commit inicial vacío:
+Luego de crear una rama, siempre realizar un commit inicial vacío:
 ```
-chore: iniciar desarrollo de HU [ID]
+chore: iniciar desarrolcambio de HU [ID/descripcion]
 ```
 
-### Tipos de commit
-/
+### Al realizar commit [OBLIGATORIO] 
+Siempre guiandos por conventional commit
 Usar:
 - `feat:` — nueva funcionalidad
 - `fix:` — corrección de errores
