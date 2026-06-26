@@ -2,42 +2,78 @@
 
 ## Formato de preguntas
 
-Usar el snippet de **respuesta rápida**: ícono + letra + texto.
+    Usar el snippet de **respuesta rápida**: 
+    ||> ícono + letra + texto.
 
 ## Modo nota
 
-> Rectifica la rama en la que trabajamos.
+    Siempre dejar nota en el chat al usuario: 
+    ">Rectifica la rama en la que trabajamos."
 
 ## Gestión de ramas
 
 ### Crear rama
 
-Cuando se solicite crear una rama:
+    Cuando se solicite crear una rama:
 
-1. Preguntar desde qué rama se crea.
-2. Crear la rama con el formato:
-   ```
-   hu-[ID]-[descripcion-kebab-case]
-   ```
+    1. Preguntar desde qué rama se crea.
+    2. Crear la rama con el formato: hu-[ID]-[descripcion-kebab-case] o [descripcion-kebab-case] dependiendo del caso.
 
 ### Commit inicial [OBLIGATORIO]
 
-Luego de crear una rama, siempre realizar un commit inicial vacío:
-```
-chore: iniciar desarrolcambio de HU [ID/descripcion]
-```
+    Luego de crear una rama, siempre realizar un commit inicial vacío:
+    ```
+    chore: iniciar desarrolcambio de HU [ID/descripcion]
+    ```
 
 ### Al realizar commit [OBLIGATORIO] 
-Siempre guiandos por conventional commit
-Usar:
-- `feat:` — nueva funcionalidad
-- `fix:` — corrección de errores
-- `refactor:` — refactorización
-- `docs:` — documentación
-- `chore:` — tareas de mantenimiento
+    Siempre guiados por conventional commit
+    Usar:
+        - `feat:` — nueva funcionalidad
+        - `fix:` — corrección de errores
+        - `refactor:` — refactorización
+        - `docs:` — documentación
+        - `chore:` — tareas de mantenimiento
+    Simepre mostrar preview al usuario para su aprobacion.
 
 ## Sincronización con `git-doc-sync`
-Si se crea o modifica un archivo en `Doc_BancaPorWhatsapp`:
+    Si se crea o modifica un archivo en `Doc_BancaPorWhatsapp`:
+    1. Ofrecer sincronizar documentacion.
+    2. Si el usuario acepta, ejecuta la skill. 
 
-1. Ofrecer sincronizar documentacion.
-2. Si el usuario acepta, ejecuta la skill. 
+
+## Gestion de comentarios de entrega [OBLIGATORIO]
+    Cuando el usuario solicite agregar un comentario de ´ENTREGA RELEASE/FEATRUE/FIX/HOTFIX´ a un workitem(WI) el comentario agregado debe de seguir el siguiente formato:
+
+```
+    ┌────────────────────────────────────────────────────────────┐
+    │  ENTREGA: {RELEASE | FEATURE | FIX | HOTFIX} v{versión}    │
+    │  PROYECTO: {nombre_repo}                                   │
+    │  FECHA: {YYYY-MM-DD}                                       │
+    │  RAMA: {rama_origen}                                       │
+    ├────────────────────────────────────────────────────────────┤
+    │  DESCRIPCIÓN                                               │
+    │  {Breve descripción de lo que se entrega}                  │
+    │                                                            │
+    │  CAMBIOS                                                   │
+    │  • {feat|fix|chore}: {descripción del cambio}              │
+    │  • {feat|fix|chore}: {descripción del cambio}              │
+    │  • {feat|fix|chore}: {descripción del cambio}              │
+    │                                                            │
+    │  ENTREGABLES                                               │
+    │  • release-notes.md                                        │
+    │    → {ruta}/entrega_release/{nombre_repo}/{version}/       │
+    │  • CONFIG-ENTORNO-PR                                       │
+    │    → {ruta}/entrega_release/{nombre_repo}/{version}/       │
+    │                                                            │
+    │  ACCIONES REQUERIDAS AL BANCO                              │
+    │  • Crear PR de {rama} → des                                │
+    │  • Mergear PR a des                                        │
+    │  • Taggear v{versión} en des                               │
+    │  • Desplegar en DES                                        │
+    │  • Configurar variables/colas según CONFIG-ENTORNO-PR      │
+    │                                                            │
+    │  NOTAS                                                     │
+    │  {Notas adicionales si aplica}                             │
+    └────────────────────────────────────────────────────────────┘
+```
