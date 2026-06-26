@@ -27,13 +27,15 @@
     ```
 
 ### Al realizar commit [OBLIGATORIO] 
-    Siempre guiados por conventional commit
-    Usar:
-        - `feat:` — nueva funcionalidad
-        - `fix:` — corrección de errores
-        - `refactor:` — refactorización
-        - `docs:` — documentación
-        - `chore:` — tareas de mantenimiento
+    Siempre Genera los mensajes de commit siguiendo estrictamente la convención:
+        - usa siempre el formato <tipo>[ámbito opcional]: <descripción compacta pero detallada>.
+            tipo:
+                - `feat:` — nueva funcionalidad
+                - `fix:` — corrección de errores
+                - `refactor:` — refactorización
+                - `docs:` — documentación
+                - `chore:` — tareas de mantenimiento.
+    Si el código rompe la compatibilidad anterior, incluye obligatoriamente BREAKING CHANGE: al inicio del cuerpo o pie del mensaje.
     Simepre mostrar preview (titulo y descripcion) al usuario para su aprobacion.
 
 ## Sincronización con `git-doc-sync`
