@@ -154,8 +154,9 @@ Variables sin origen claro:
 - Ambientes destino (DES, QA, PROD)
 - PR de referencia (si no se detectó automáticamente)
 - **Ubicación del archivo de salida:**
-  Opción A (sugerida) → Raíz del proyecto objetivo, dentro de `entrega_release/`
-  Opción B → Ruta específica del cliente, dentro de `entrega_release/` (pedir la ruta completa)
+  Preguntar al usuario la ruta base y la versión del release (ej. v1.2.3). Construir la carpeta: `<ruta-base>/entrega_release/{nombre_repo}/{release}/`
+  - `{nombre_repo}` se obtiene del remoto: `basename $(git remote get-url origin) .git`
+  - `{release}` es la versión que indique el usuario
 
 ## Fase D — Preview y confirmación
 
@@ -231,7 +232,7 @@ Mostrar resumen consolidado antes de generar el documento:
 (3) Cancelar
 ════════════════════════════════════════════════════
 
-**Nota:** La ubicación se definió en Fase C. En ambos casos el archivo se genera dentro de `entrega_release/`.
+**Nota:** La ubicación se definió en Fase C. El archivo se genera dentro de `<ruta-base>/entrega_release/{nombre_repo}/{release}/`.
 ```
 
 **Reglas:** Solo incluir secciones con cambios. NO incluir migraciones, service connections,
@@ -241,10 +242,10 @@ infraestructura, health checks, ni pasos de deploy.
 
 Usar como base `assets/template-CONFIG-ENTORNO-PR.md`.
 
-Generar `CONFIG-ENTORNO-PR-{ID} ({nombre microservicio}).md` donde `{ID}` es el número de PR o nombre de rama analizado y `{nombre microservicio}` es el nombre del microservicio (ej. `CONFIG-ENTORNO-PR-42 (ms-banca-simulacion-productos).md`). La ubicación la define el usuario en Fase C. En ambos casos se crea la carpeta `entrega_release/` y el archivo se genera dentro:
+Generar `CONFIG-ENTORNO-PR-{ID} ({nombre microservicio}).md` donde `{ID}` es el número de PR o nombre de rama analizado y `{nombre microservicio}` es el nombre del microservicio (ej. `CONFIG-ENTORNO-PR-42 (ms-banca-simulacion-productos).md`). La ruta base y release los define el usuario en Fase C. Construir: `<ruta-base>/entrega_release/{nombre_repo}/{release}/`
 
-- **Opción A (sugerida):** `<raíz-proyecto>/entrega_release/`
-- **Opción B:** `<ruta-cliente>/entrega_release/`
+- `{nombre_repo}` se obtiene del remoto: `basename $(git remote get-url origin) .git`
+- `{release}` es la versión que indique el usuario (ej. v1.2.3)
 
 El alcance según Fase 0:
 - **MS nuevo:** inventario completo de variables, colas, redis y migraciones
@@ -267,7 +268,7 @@ No incluir secretos reales. Alertar si hay secretos hardcodeados.
 ## Reglas obligatorias
 
 1. Solo documentar configuración de variables — nada de setup local, infra, deploy, health checks
-2. Generar `CONFIG-ENTORNO-PR-{ID} ({nombre microservicio}).md` dentro de `entrega_release/` ({ID} = nº de PR o nombre de rama, {nombre microservicio} = nombre del microservicio). Preguntar al usuario la ubicación base: raíz del proyecto objetivo o ruta específica del cliente.
+2. Generar `CONFIG-ENTORNO-PR-{ID} ({nombre microservicio}).md` dentro de `<ruta-base>/entrega_release/{nombre_repo}/{release}/` ({ID} = nº de PR o nombre de rama, {nombre microservicio} = nombre del microservicio). Preguntar al usuario la ruta base y la versión del release.
 3. Nunca asumir origen de variables — preguntar al usuario con archivo+línea de contexto
 4. Nunca incluir secretos reales; alertar si hay secretos commiteados
 5. Mostrar preview antes de generar el documento final
@@ -292,7 +293,7 @@ No incluir secretos reales. Alertar si hay secretos hardcodeados.
 
 ## Salida esperada
 
-`CONFIG-ENTORNO-PR-{ID} ({nombre microservicio}).md` dentro de `entrega_release/` en la ubicación base que el usuario definió en Fase C (raíz del proyecto objetivo o ruta específica del cliente). {ID} = nº de PR o nombre de rama, {nombre microservicio} = nombre del microservicio.
+`CONFIG-ENTORNO-PR-{ID} ({nombre microservicio}).md` dentro de `<ruta-base>/entrega_release/{nombre_repo}/{release}/`. {ID} = nº de PR o nombre de rama, {nombre microservicio} = nombre del microservicio. La ruta base y release los define el usuario en Fase C.
 
 ## Proceso detallado
 
