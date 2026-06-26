@@ -1,0 +1,37 @@
+.idea
+.vscode/
+
+# Environment variables
+.env
+
+# Ceiba metadata
+.ceiba-metodo/
+.github/
+.*/
+
+# Microservicios
+ms-banca-agente-humano/
+ms-banca-auditoria/
+ms-banca-autenticacion/
+ms-banca-conversacion/
+ms-banca-localizacion/
+ms-banca-notificaciones/
+ms-banca-productos/
+ms-banca-referidos/
+ms-banca-reportes/
+ms-banca-terminos-condiciones/
+GuilloContext/
+
+config_consultas.json
+
+# Método Ceiba - Auto-managed agent files
+.github/agents/metodo-ceiba-*.agent.md
+# Método Ceiba - Auto-managed kanban prompts
+.github/prompts/ceiba-kanban-*.prompt.md
+
+# Método Ceiba - Auto-injected agent skills
+.github/skills/
+
+# Ceiba Method workspace (auto-generated)
+.vscode/ceiba.code-workspace
+.venv
