@@ -4,8 +4,10 @@
 # Environment variables
 .env
 
+opencode.json
 
 config_consultas.json
+.tmp.driveupload/
 
 */Icon
 Icon?
