@@ -293,10 +293,6 @@ Muestra en el chat el resumen completo antes de tocar ADO:
 
 2. Si el archivo era Formato B (borrador) y tenía `**ID Original:**` con un ID distinto, NO sobreescribe ese campo — añade el sello como bloque separado.
 
-**B. Actualización del Index:**
-3. Agrega la HU publicada al `index_[nombre].md` correspondiente según su `IterationPath`:
-   | ID | Tipo: User Story | Título | Estado: New | Asignado | Padre |
-
 ---
 
 ## Uso Standalone (sin Agent Suite)

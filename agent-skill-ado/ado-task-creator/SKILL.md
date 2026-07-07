@@ -1,8 +1,8 @@
 ---
 name: ado-task-creator
 description: >
-  Creación de tareas hijas en Azure DevOps en dos fases: diseño local desde un
-  archivo de contexto técnico, y sincronización batch con ADO. Analiza documentos
+  Creación de tareas hijas en Azure DevOps en dos fases: diseño desde un
+  archivo de contexto técnico, y creación en ADO. Analiza documentos
   para proponer subtareas, valida contra la HU padre, y crea work items vinculados.
   Usa esta skill cuando el usuario quiera agregar tareas a una User Story, crear
   tareas desde un documento técnico, planificar subtareas, o desglosar una HU en
@@ -13,29 +13,28 @@ description: >
 
 # ADO Task Creator
 
-Creación de tareas hijas en Azure DevOps con flujo de dos fases: diseño local (cero consumo ADO) y sincronización batch.
+Creación de tareas hijas en Azure DevOps con flujo de dos fases: diseño y creación.
 
 ## Contexto del perfil activo
 
 Esta skill recibe del agente orquestador el contexto ya resuelto:
 - `project_name` — proyecto ADO resuelto desde `project_map.workitems`
 - `user_email` — email del perfil activo
-- `base_reports_path` — ruta base de reportes
 - `config_extras` — para reglas dinámicas de estimación, formato, etc.
 
 La skill **no lee `config_consultas.json` directamente**. Todo el contexto es inyectado por el agente.
 
 ## Comando: AGG-TAREA [HU_ID] [archivo_contexto]
 
-### Fase 1 — Diseño y Simulación Local (Cero Consumo ADO)
+### Fase 1 — Diseño
 
 **A. Análisis de Contexto:**
 1. Lee el `[archivo_contexto]` con `read/readFile`.
 2. Identifica los pasos técnicos, componentes o acciones discretas que constituyen subtareas.
 
 **B. Validación de Identidad:**
-1. Busca en `index_[nombre].md` si el `HU_ID` existe y es de tipo `User Story`.
-2. Si no está en el index, consulta `ado/wit_get_work_item` para validar la HU padre.
+1. Consulta `ado/wit_get_work_item` con `HU_ID` para validar que existe y es `User Story`.
+2. Si no existe o no es User Story: informar y detener.
 
 **C. Propuesta de Plan de Trabajo:**
 Presenta en el chat una tabla con las tareas detectadas:
@@ -45,9 +44,9 @@ Presenta en el chat una tabla con las tareas detectadas:
 | 1 | [Título] | [Descripción] | [Horas/Puntos según config_extras] |
 
 **D. Interacción por Ambigüedad:**
-Si un punto del documento es vago, el agente se detiene.
+Si un punto del documento es vago, el agente se detiene y pregunta.
 
-### Fase 2 — Confirmación y Creación en Lote (Batch Sync)
+### Fase 2 — Confirmación y Creación en Lote
 
 Tras validar todos los puntos, presenta el resumen y pregunta:
 > **[S]** Sí, crear todas | **[E]** Editar lista | **[A]** Abortar
@@ -60,18 +59,10 @@ Tras validar todos los puntos, presenta el resumen y pregunta:
    - `System.AssignedTo` → `user_email` del perfil activo
    - Campos adicionales según `config_extras`
 2. Recoge los IDs reales devueltos por ADO.
+3. Muestra resumen: IDs creados, vínculos, errores si los hubo.
 
-### Fase 3 — Registro en Index
-
-1. Agrega cada tarea creada al `index_[nombre].md` con:
-   | ID | Tipo | Título | Estado | Asignado | Padre |
-   - Tipo: siempre `Task`
-   - Padre: `[HU_ID]`
-2. No crear archivos individuales de detalle.
-
-## Gotchas
-
-- **NUNCA crees tareas en ADO sin confirmación explícita [S].**
-- Si una tarea falla en batch, continúa con las siguientes y reporta errores al final.
-- Verifica que `HU_ID` sea `User Story`. Si es Bug, informa pero permite continuar.
-- Siempre incluir el `Padre: [HU_ID]` en la entrada del index para las tasks hijas.
+## REGLAS
+SIEMPRE CONSULTAR ADO (NO USAR CACHE LOCAL).
+NUNCA crear tareas en ADO sin confirmación explícita [S].
+Si una tarea falla en batch, continuar con las siguientes y reportar errores al final.
+Verificar que `HU_ID` sea `User Story`. Si es Bug, informar pero permitir continuar.
