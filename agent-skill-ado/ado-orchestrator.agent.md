@@ -1,7 +1,9 @@
 ---
-name: "ADO Orchestrator"
 description: "Orquestador de Azure DevOps. Consultas directas a ADO, gestión de perfiles y delegación de skills para flujos complejos."
 mode: primary
+model: opencode/deepseek-v4-flash-free
+temperature: 0.1
+hidden: true
 tools:
   ado_*: true
   read: true
@@ -11,8 +13,6 @@ tools:
   glob: true
   grep: true
   webfetch: true
-  vscode_askQuestions: true
-  vscode_runCommand: true
 permission:
   bash:
     "*": allow

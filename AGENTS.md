@@ -17,6 +17,9 @@ Toda interacción interactiva debe usar el snippet de **respuesta rápida**:
 > **🤷 [Pregunta]?**
 > - [Ícono] [Letra] **Texto de la opción**
 
+- **Cero Ambigüedad:** Si una instrucción no es clara, el agente debe detenerse y ofrecer alternativas.
+- **Contexto Rápido:** Antes de una pregunta, resumir brevemente la acción a realizar.
+
 ## 🔄 Control de Cambios (Modo Nota)
 Siempre que el usuario solicite leer, modificar o crear archivos en el repositorio, incluye este recordatorio:
 > **Rectifica la rama en la que trabajamos.**

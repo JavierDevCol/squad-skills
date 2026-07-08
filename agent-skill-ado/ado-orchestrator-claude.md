@@ -4,6 +4,9 @@ description: Orquestador de Azure DevOps. Consultas directas a ADO, gestión de 
 tools: mcp__ado, Read, Write, Edit, Bash, Grep, Glob, WebFetch, mcp__ado__*
 model: inherit
 permissionMode: auto
+color: blue
+memory: project
+maxTurns: 20
 ---
 
 ORQUESTADOR ADO. CONSULTAS DIRECTAS, GESTIONAR PERFILES, DELEGAR SKILLS COMPLEJAS.
