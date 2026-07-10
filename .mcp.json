@@ -1,0 +1,39 @@
+{
+  "mcpServers": {
+    "ado": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@azure-devops/mcp@latest",
+        "GestionRequerimientos"
+      ]
+    },
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
+    },
+    "sonarqube": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "SONARQUBE_TOKEN",
+        "-e",
+        "SONARQUBE_URL",
+        "docker.io/mcp/sonarqube:latest"
+      ],
+      "env": {
+        "SONARQUBE_TOKEN": "sqa_b4c11afd4e6975f04c12b9a80bfa63877cae42cd",
+        "SONARQUBE_URL": "http://host.docker.internal:9000"
+      }
+    }
+  }
+}
