@@ -1,19 +1,18 @@
 ---
-name: bugfix-ceiba
+name: fix-develop
 description: >
-  Usa esta skill cuando necesites crear y gestionar un bugfix durante el
-  desarrollo en CEIBA para el proyecto Banca por WhatsApp. Aplica para:
-  bug encontrado en DEVELOP, bug durante feature, bug en DES antes de
-  entrega formal, o corrección rápida sobre develop. No la uses para
-  bugs en releases ya entregados al banco (usar ajuste-release) ni para
-  entregas formales (usar handoff-ceiba).
+  Usa esta skill cuando necesites arreglar un bug durante el desarrollo
+  en el proyecto Banca por WhatsApp. Aplica para: bug encontrado en DEVELOP,
+  bug durante feature, bug en DES antes de entrega formal, o corrección rápida
+  sobre develop. No la uses para bugs en releases ya entregados al banco
+  (usar fix-release) ni para entregas formales (usar handoff-ceiba).
 metadata:
   author: CEIBA DevOps
   version: 1.0.0
   manual-ref: MANUAL_PASO_AMBIENTES.md §3.1, §5
 ---
 
-# Skill: Bugfix CEIBA
+# Skill: Fix Develop
 
 Gestiona la resolución de bugs durante el desarrollo, antes de la entrega formal al banco.
 
@@ -44,7 +43,7 @@ Gestiona la resolución de bugs durante el desarrollo, antes de la entrega forma
 ║      → Fix sobre develop antes de crear release         ║
 ║                                                        ║
 ║  [4] Bug en DES (después de entrega) / PRU / PREPRO/PRO║
-║      → Usar @ajuste-release (RC o hotfix)              ║
+║      → Usar @fix-release (RC o hotfix)              ║
 ║                                                        ║
 ╚══════════════════════════════════════════════════════════╝
 ```
@@ -186,7 +185,7 @@ No se crea branch adicional. El fix va como commit dentro de la feature.
 ```bash
 # 1. Verificar que NO existe release branch activo
 git branch -a | grep release/
-# Si existe release/vX.Y.Z → redirigir a @ajuste-release (Opción 1 RC)
+# Si existe release/vX.Y.Z → redirigir a @fix-release (Opción 1 RC)
 
 # 2. Fix sobre develop
 git checkout develop && git pull
@@ -222,8 +221,8 @@ git push origin develop
 
 | Escenario | Skill correcta |
 |-----------|----------------|
-| Bug en DES después de entrega (release entregado) | `ajuste-release` Opción 1 (RC) |
-| Bug en PRU/PREPRO/PRO | `ajuste-release` Opción 2 (hotfix) |
+| Bug en DES después de entrega (release entregado) | `fix-release` Opción 1 (RC) |
+| Bug en PRU/PREPRO/PRO | `fix-release` Opción 2 (hotfix) |
 | Entrega formal de release | `handoff-ceiba` |
 | Feature nueva (no es bug) | Desarrollo normal → PR a develop |
 
@@ -243,7 +242,7 @@ git push origin develop
 
 1. **Bug en develop = fix en develop.** No crear release branch para un bugfix pre-entrega.
 2. **Bug durante feature = fix en la misma feature.** No crear branch separado.
-3. **Si hay release branch activo** → redirigir a `ajuste-release`.
+3. **Si hay release branch activo** → redirigir a `fix-release`.
 4. **Siempre verificar que el fix no rompe otras features** antes de push a develop.
 5. **Naming del commit:** `fix: [WA2-xxx] <descripción>` o `fix: <descripción>` si no hay ID.
 
@@ -252,13 +251,13 @@ git push origin develop
 - **develop protegida:** Si push directo falla, crear PR de `bugfix/WA2-xxx → develop`.
 - **Bug causado por otro merge:** Verificar `git log develop --oneline -20` para identificar el commit culpable.
 - **Fix que requiere cambio de config:** Ejecutar `@pr-config-audit` después del fix.
-- **Bug en DES pero release ya entregado:** NO es esta skill. Usar `ajuste-release`.
+- **Bug en DES pero release ya entregado:** NO es esta skill. Usar `fix-release`.
 
 ## Skills complementarias
 
 | Skill | Qué hace | Cuándo |
 |-------|----------|--------|
-| `ajuste-release` | Fix sobre release entregado (RC/hotfix) | Bug en DES post-entrega o PRU/PREPRO/PRO |
+| `fix-release` | Fix sobre release entregado (RC/hotfix) | Bug en DES post-entrega o PRU/PREPRO/PRO |
 | `handoff-ceiba` | Entrega formal al banco | Después de validar fix en DEVELOP |
 | `pr-config-audit` | Genera CONFIG_ENTORNO_PR | Si el fix incluye cambios de config |
 | `ado-pipeline-analyzer` | Valida pipeline | Verificar que fix no rompe build/tests |

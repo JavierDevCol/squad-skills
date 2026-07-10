@@ -1,20 +1,21 @@
 ---
-name: ajuste-release
+name: fix-release
 description: >
-  Usa esta skill cuando necesites aplicar ajustes o fixes sobre un release
+  Usa esta skill cuando necesites arreglar un bug sobre un release
   ya entregado al banco en el proyecto Banca por WhatsApp. Aplica para:
   banco solicita cambios en DES (RC), bug reportado en PRU/PREPRO/PRO (hotfix),
   crear release candidate, o propagar fix por todos los ambientes.
-  No la uses para entregas iniciales de release (usar handoff-ceiba).
+  No la uses para entregas iniciales de release (usar handoff-ceiba)
+  ni para bugs durante desarrollo (usar fix-develop).
 metadata:
   author: CEIBA DevOps
   version: 1.0.0
   manual-ref: MANUAL_PASO_AMBIENTES.md §3.2.1, §5
 ---
 
-# Skill: Ajuste de Releases
+# Skill: Fix Release
 
-Gestiona ajustes y hotfixes sobre releases ya entregados al banco.
+Gestiona fixes y hotfixes sobre releases ya entregados al banco.
 
 ## Referencias
 

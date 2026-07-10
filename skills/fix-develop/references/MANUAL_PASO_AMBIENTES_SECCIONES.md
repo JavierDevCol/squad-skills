@@ -42,7 +42,7 @@ git checkout -b release/v2.2.3-rc.1 release/v2.2.3
 git push origin release/v2.2.3-rc.1
 ```
 
-> **Nota:** Este flujo lo gestiona `ajuste-release`, no `bugfix-ceiba`.
+> **Nota:** Este flujo lo gestiona `fix-release`, no `fix-develop`.
 
 ---
 
@@ -68,7 +68,7 @@ git checkout -b release/v2.2.4
 git push origin release/v2.2.4
 ```
 
-> **Nota:** Este flujo lo gestiona `ajuste-release`, no `bugfix-ceiba`.
+> **Nota:** Este flujo lo gestiona `fix-release`, no `fix-develop`.
 
 ---
 
@@ -95,9 +95,9 @@ git push origin release/v2.2.4
 
 | Escenario | Entorno | Skill |
 |-----------|---------|-------|
-| Bug en DEVELOP (post-merge) | CEIBA | `bugfix-ceiba` Opción 1 |
-| Bug en feature branch | CEIBA | `bugfix-ceiba` Opción 2 |
-| Bug en DES (pre-entrega) | CEIBA | `bugfix-ceiba` Opción 3 |
-| Bug en DES (post-entrega, RC) | CEIBA → BANCO | `ajuste-release` Opción 1 |
-| Bug en PRU/PREPRO/PRO | BANCO reporta | `ajuste-release` Opción 2 |
+| Bug en DEVELOP (post-merge) | CEIBA | `fix-develop` Opción 1 |
+| Bug en feature branch | CEIBA | `fix-develop` Opción 2 |
+| Bug en DES (pre-entrega) | CEIBA | `fix-develop` Opción 3 |
+| Bug en DES (post-entrega, RC) | CEIBA → BANCO | `fix-release` Opción 1 |
+| Bug en PRU/PREPRO/PRO | BANCO reporta | `fix-release` Opción 2 |
 | Entrega formal | CEIBA → BANCO | `handoff-ceiba` |
