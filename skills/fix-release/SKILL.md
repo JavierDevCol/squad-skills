@@ -5,7 +5,7 @@ description: >
   ya entregado al banco en el proyecto Banca por WhatsApp. Aplica para:
   banco solicita cambios en DES (RC), bug reportado en PRU/PREPRO/PRO (hotfix),
   crear release candidate, o propagar fix por todos los ambientes.
-  No la uses para entregas iniciales de release (usar handoff-ceiba)
+  No la uses para entregas iniciales de release (usar entrega-ambiente-banco)
   ni para bugs durante desarrollo (usar fix-develop).
 metadata:
   author: CEIBA DevOps
@@ -225,7 +225,7 @@ INFORMAME CUANDO EL PR SE ACEPTE PARA SEGUIR EL FLUJO.
 ║                                                        ║
 ║  ¿Qué sigue?                                            ║
 ║                                                        ║
-║  [S] Entrega formal — Ejecutar @handoff-ceiba           ║
+║  [S] Entrega formal — Ejecutar @entrega-ambiente-banco           ║
 ║      Genera release-notes, checklist, RESUMEN_ENTREGA   ║
 ║      Crama release/vX.Y.Z con artefactos completos      ║
 ║                                                        ║
@@ -235,14 +235,14 @@ INFORMAME CUANDO EL PR SE ACEPTE PARA SEGUIR EL FLUJO.
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-#### Paso 6a — Si elige [S]: Delegar a handoff-ceiba
+#### Paso 6a — Si elige [S]: Delegar a entrega-ambiente-banco
 
 ```
-Ejecutar: @handoff-ceiba
+Ejecutar: @entrega-ambiente-banco
 
 Seleccionar: [1] Entregar release desde DEVELOP
 
-La skill handoff-ceiba se encarga de:
+La skill entrega-ambiente-banco se encarga de:
   ├── Verificar que develop pasó pipeline
   ├── Generar release-notes.md
   ├── Crama release/vX.Y.Z
@@ -338,7 +338,7 @@ git push origin release/v2.2.3-rc.1
 6. **No crear tags.** Los tags los genera el banco al mergear a des.
 7. **Back-merge siempre.** Todo fix en release debe propagarse a develop.
 8. **develop protegida.** Merge a develop siempre via PR. Nunca push directo.
-9. **Delegar a handoff-ceiba.** Después de merge a develop, ofrecer entrega formal con artefactos completos.
+9. **Delegar a entrega-ambiente-banco.** Después de merge a develop, ofrecer entrega formal con artefactos completos.
 
 ## Gotchas
 
@@ -352,7 +352,7 @@ git push origin release/v2.2.3-rc.1
 
 | Skill | Qué hace | Cuándo |
 |-------|----------|--------|
-| `handoff-ceiba` | Entrega formal con artefactos | Opción 2: después de merge a develop (paso 6a) |
-| `handoff-ceiba` | Entrega inicial de release | Primera entrega a DES |
+| `entrega-ambiente-banco` | Entrega formal con artefactos | Opción 2: después de merge a develop (paso 6a) |
+| `entrega-ambiente-banco` | Entrega inicial de release | Primera entrega a DES |
 | `pr-config-audit` | Genera CONFIG_ENTORNO_PR | Si el fix incluye cambios de config |
 | `ado-pipeline-analyzer` | Valida pipeline | Verificar que el fix no rompe build/tests |

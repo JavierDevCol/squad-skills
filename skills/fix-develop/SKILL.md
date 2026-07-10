@@ -5,7 +5,7 @@ description: >
   en el proyecto Banca por WhatsApp. Aplica para: bug encontrado en DEVELOP,
   bug durante feature, bug en DES antes de entrega formal, o corrección rápida
   sobre develop. No la uses para bugs en releases ya entregados al banco
-  (usar fix-release) ni para entregas formales (usar handoff-ceiba).
+  (usar fix-release) ni para entregas formales (usar entrega-ambiente-banco).
 metadata:
   author: CEIBA DevOps
   version: 1.0.0
@@ -223,7 +223,7 @@ git push origin develop
 |-----------|----------------|
 | Bug en DES después de entrega (release entregado) | `fix-release` Opción 1 (RC) |
 | Bug en PRU/PREPRO/PRO | `fix-release` Opción 2 (hotfix) |
-| Entrega formal de release | `handoff-ceiba` |
+| Entrega formal de release | `entrega-ambiente-banco` |
 | Feature nueva (no es bug) | Desarrollo normal → PR a develop |
 
 ---
@@ -258,6 +258,6 @@ git push origin develop
 | Skill | Qué hace | Cuándo |
 |-------|----------|--------|
 | `fix-release` | Fix sobre release entregado (RC/hotfix) | Bug en DES post-entrega o PRU/PREPRO/PRO |
-| `handoff-ceiba` | Entrega formal al banco | Después de validar fix en DEVELOP |
+| `entrega-ambiente-banco` | Entrega formal al banco | Después de validar fix en DEVELOP |
 | `pr-config-audit` | Genera CONFIG_ENTORNO_PR | Si el fix incluye cambios de config |
 | `ado-pipeline-analyzer` | Valida pipeline | Verificar que fix no rompe build/tests |

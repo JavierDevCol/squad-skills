@@ -100,4 +100,4 @@ git push origin release/v2.2.4
 | Bug en DES (pre-entrega) | CEIBA | `fix-develop` Opción 3 |
 | Bug en DES (post-entrega, RC) | CEIBA → BANCO | `fix-release` Opción 1 |
 | Bug en PRU/PREPRO/PRO | BANCO reporta | `fix-release` Opción 2 |
-| Entrega formal | CEIBA → BANCO | `handoff-ceiba` |
+| Entrega formal | CEIBA → BANCO | `entrega-ambiente-banco` |

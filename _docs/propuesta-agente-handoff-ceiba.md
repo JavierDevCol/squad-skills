@@ -394,7 +394,7 @@ Selecciona una opción: b
 ## 5. Resumen de la Lógica de Decisión
 
 ```
-Usuario invoca skill handoff-ceiba
+Usuario invoca skill entrega-ambiente-banco
 │
 ├─ ¿Feature ya está en develop?
 │  Sí ─────────────────────────────► Opción 1: Entregar desde DEVELOP
@@ -422,7 +422,7 @@ Usuario invoca skill handoff-ceiba
 
 ```markdown
 ---
-name: handoff-ceiba
+name: entrega-ambiente-banco
 description: >
   Prepara y ejecuta la entrega de releases de CEIBA al banco para el proyecto
   Banca por WhatsApp. Úsala cuando necesites preparar un handoff al banco,
@@ -439,7 +439,7 @@ description: >
 ### Frontmatter YAML
 
 ```yaml
-name: handoff-ceiba
+name: entrega-ambiente-banco
 description: >
   Prepara y ejecuta la entrega de releases de CEIBA al banco para el proyecto
   Banca por WhatsApp. Úsala cuando necesites preparar un handoff al banco,
@@ -461,7 +461,7 @@ metadata:
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│                   SKILL handoff-ceiba                             │
+│                   SKILL entrega-ambiente-banco                             │
 │                                                                  │
 │  Prompt base: MANUAL_PASO_AMBIENTES.md §3.2 + §3.2.1 + §7 + §10 │
 │  + lógica de menú con 2 opciones + 2 sub-casos                   │
@@ -561,7 +561,7 @@ El agente invoca la skill automáticamente para consultar el último build en de
 opencode de este proyecto /
 ├── .opencode/
 │   └── skills/
-│       └── handoff-ceiba/
+│       └── entrega-ambiente-banco/
 │           ├── SKILL.md                   # Skill principal con menú + lógica
 │           └── references/
 │               └── MANUAL_PASO_AMBIENTES.md  # Copia de referencia del manual

@@ -1,9 +1,9 @@
 ---
-name: handoff-ceiba
+name: entrega-ambiente-banco
 description: >
-  Prepara y ejecuta la entrega de releases de CEIBA al banco para el proyecto
-  Banca por WhatsApp. Úsala cuando necesites preparar un handoff al banco,
-  crear un release branch, generar release notes, CONFIG_ENTORNO_PR,
+  Prepara y ejecuta la entrega de releases al banco para el proyecto
+  Banca por WhatsApp. Úsala cuando necesites preparar una entrega formal
+  al banco, crear un release branch, generar release notes, CONFIG_ENTORNO_PR,
   feature lista para release, ajustar release (RC), hotfix release.
   NOTA: No debes activarte para desarrollo normal de features, solo
   para preparación de entregas formales al banco.
@@ -12,7 +12,7 @@ metadata:
   version: 1.0.0
 ---
 
-# Skill: Handoff CEIBA → BANCO
+# Skill: Entrega Ambiente Banco
 
 Orquesta la entrega de releases de CEIBA al banco siguiendo el manual de paso entre ambientes.
 
