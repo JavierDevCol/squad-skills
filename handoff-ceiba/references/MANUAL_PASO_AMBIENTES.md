@@ -3,6 +3,7 @@
 | Versión | Fecha       | Autor          | Descripción                     |
 |---------|-------------|----------------|---------------------------------|
 | 1.0     | 2026-06-11  | DevOps Ceiba   | Versión inicial del manual      |
+| 1.1     | 2026-07-08  | DevOps Ceiba   | RC versioning + flujo hotfix invertido |
 
 ---
 
@@ -121,7 +122,10 @@ git rev-parse release/v1.2.3
 
 **Reglas del release:**
 - Versionamiento semántico: `vMAJOR.MINOR.PATCH` (ej. `v2.1.0`)
+- Ajustes post-entrega en DES: `vMAJOR.MINOR.PATCH-rc.N` (ej. `v2.1.0-rc.1`)
+- Hotfixes: incremento de PATCH (ej. `v2.1.0` → `v2.1.1`)
 - El tag `v1.2.3` lo genera el banco al mergear el PR a `des` (punto de handoff)
+- Los tags RC (`v1.2.3-rc.N`) los genera el banco al mergear cada RC a `des`
 - Cada release debe incluir release notes con el cambio acumulado desde el tag anterior
 - El archivo `release-notes.md` se genera **desde cero en cada release** sobrescribiendo el anterior, no se actualiza incrementalmente.
   - Al crear `release/vX.Y.Z` el pipeline ejecuta `git log vX.Y.Z-1..HEAD > release-notes.md`
@@ -129,22 +133,70 @@ git rev-parse release/v1.2.3
 
 ### 3.2.1 Ajustes solicitados por el banco tras validación en DES
 
-Si el banco solicita cambios tras validar en DES, CEIBA aplica los ajustes directamente sobre el release branch (aún vivo). En este caso **es aceptable y esperado** que develop y release queden en commits distintos — release tendrá commits propios que develop aún no tiene:
+Si el banco solicita cambios tras validar en DES, CEIBA aplica los ajustes directamente sobre el release branch (aún vivo). Cada ajuste se entrega como **Release Candidate (RC)** con versionado diferenciado.
 
-```bash
-git checkout release/v1.2.3
-# aplicar ajustes
-git commit -m "fix: ajuste solicitado por banco"
-git push origin release/v1.2.3
+#### Convención de versionado RC
 
-# Propagar el fix a develop para mantener consistencia
-# Si develop está protegida, crear un PR desde release/v1.2.3 → develop
-git checkout develop
-git merge --no-ff release/v1.2.3
-git push origin develop   # directo si develop lo permite; PR si está protegida
+| Escenario | Rama | Tag en des | Ejemplo |
+|-----------|------|------------|---------|
+| Entrega original | `release/vX.Y.Z` | `vX.Y.Z` | `release/v2.2.3` → tag `v2.2.3` |
+| Primer ajuste | `release/vX.Y.Z-rc.N` | `vX.Y.Z-rc.N` | `release/v2.2.3-rc.1` → tag `v2.2.3-rc.1` |
+| Segundo ajuste | `release/vX.Y.Z-rc.N` | `vX.Y.Z-rc.N` | `release/v2.2.3-rc.2` → tag `v2.2.3-rc.2` |
+| Aprobación final | — | `vX.Y.Z` (sin RC) | Tag `v2.2.3` final en des |
+
+#### Ciclo de vida de las ramas
+
+- **`release/vX.Y.Z`** — rama base, permanece viva durante todo el ciclo RC. Acumula los fixes.
+- **`release/vX.Y.Z-rc.N`** — ramas efímeras. Se crean desde la rama base para el PR a `des`. Se eliminan inmediatamente después de que el banco mergea el PR.
+
+```
+release/v2.2.3        ← viva durante todo el ciclo RC
+  ├── release/v2.2.3-rc.1  ← efímera: PR → merge → tag → eliminar
+  ├── release/v2.2.3-rc.2  ← efímera: PR → merge → tag → eliminar
+  └── [banco aprueba] → tag v2.2.3 final → back-merge a develop → eliminar release/v2.2.3
 ```
 
-El banco toma la rama actualizada y actualiza el PR hacia `des`.
+#### Flujo de ajuste
+
+```bash
+# 1. Aplicar fix sobre la rama base (release/vX.Y.Z sigue viva)
+git checkout release/v2.2.3
+# aplicar ajustes
+git commit -m "fix: ajuste solicitado por banco en DES"
+git push origin release/v2.2.3
+
+# 2. Propagar el fix a develop (back-merge limpio)
+git checkout develop
+git merge --no-ff release/v2.2.3
+git push origin develop   # directo si develop lo permite; PR si está protegida
+
+# 3. Crear rama RC efímera para el PR al banco
+git checkout -b release/v2.2.3-rc.1 release/v2.2.3
+git push origin release/v2.2.3-rc.1
+
+# 4. El banco crea PR release/v2.2.3-rc.1 → des, mergea y taggea v2.2.3-rc.1 en des
+
+# 5. Eliminar rama RC (su propósito está cumplido)
+git push origin --delete release/v2.2.3-rc.1
+git branch -d release/v2.2.3-rc.1
+```
+
+#### Aprobación final
+
+Cuando el banco aprueba la versión (después de 0 o más RCs):
+
+```bash
+# El banco crea PR desde release/vX.Y.Z (rama base, no RC) → des
+# El banco mergea y taggea el tag final vX.Y.Z (sin sufijo RC) en des
+
+# CEIBA hace back-merge final a develop y elimina la rama base
+git checkout develop
+git merge --no-ff release/v2.2.3
+git push origin develop
+
+git push origin --delete release/v2.2.3
+git branch -d release/v2.2.3
+```
 
 > ℹ️ Después del back-merge, develop y release volverán a tener commits distintos (develop tendrá el merge commit `--no-ff`). Esto es intencional y no requiere corrección.
 
@@ -222,49 +274,74 @@ git push origin main v1.2.3-pro
 
 ### 5.1 Hotfix en DES (no ha pasado a PRU)
 
+Cuando el bug se detecta en DES y aún no ha sido promovido a PRU, se aplica el fix directamente sobre la rama release viva y se entrega como RC:
+
 ```bash
-git checkout release/v1.2.3
+git checkout release/v2.2.3
 # aplicar fix
 git commit -m "fix: corregir [descripción]"
-git checkout des
-git merge --no-ff release/v1.2.3
-git tag -a v1.2.4 -m "Hotfix v1.2.4 para DES"
-git merge --no-ff release/v1.2.3 develop
-git push origin des develop v1.2.4
+git push origin release/v2.2.3
+
+# Back-merge a develop
+git checkout develop
+git merge --no-ff release/v2.2.3
+git push origin develop
+
+# Crear RC efímera para el PR
+git checkout -b release/v2.2.3-rc.1 release/v2.2.3
+git push origin release/v2.2.3-rc.1
+
+# El banco mergea PR a des → tag v2.2.3-rc.1 → eliminar RC
 ```
 
-### 5.2 Hotfix en PRU o superior (bug reportado por el banco)
+### 5.2 Hotfix en PRU, PREPRO o PRO (bug reportado por el banco)
+
+Cuando el banco reporta un bug en un ambiente superior (PRU, PREPRO o PRO), el flujo es:
+
+1. **Analizar el bug desde el tag del ambiente afectado**
+2. **Verificar que develop también necesita el fix** (para merge limpio)
+3. **Merge a develop primero**
+4. **Crear nuevo release** (`vX.Y.Z+1` — incremento de PATCH)
+5. **Flujo normal de release:** develop → des → pru → prepro → pro
 
 ```bash
-# Desde el tag del ambiente donde se reportó
-git checkout -b hotfix/arreglo-x v1.2.3-pru
-# aplicar fix
+# 1. Crear hotfix branch desde el tag del ambiente afectado
+git checkout -b hotfix/arreglo-x v2.2.3-pro    # o v2.2.3-pru, v2.2.3-prepro
+
+# 2. Analizar y aplicar el fix
+# ... correcciones ...
 git commit -m "fix: corregir [descripción]"
 
-# Merge a main primero (ambiente donde está el bug)
-git checkout main
+# 3. Verificar que develop tiene el problema y necesita el fix
+git log develop --oneline | head -10   # confirmar que el bug existe en develop
+
+# 4. Merge a develop PRIMERO (merge limpio)
+git checkout develop
 git merge --no-ff hotfix/arreglo-x
+git push origin develop   # directo si develop lo permite; PR si está protegida
 
-# Merge a las ramas inferiores para mantener consistencia
-git checkout prepro && git merge --no-ff main
-git checkout pru && git merge --no-ff prepro
-git checkout des && git merge --no-ff pru
-git checkout develop && git merge --no-ff des
+# 5. Crear nuevo release desde develop (ya tiene el fix)
+git checkout develop
+git pull
+git checkout -b release/v2.2.4
+git push origin release/v2.2.4
 
-# Tags
-git tag -a v1.2.4-pro -m "Hotfix v1.2.4 para PRO"
-git tag -a v1.2.4-prepro -m "Hotfix v1.2.4 propagado a PREPRO"
-git tag -a v1.2.4-pru -m "Hotfix v1.2.4 propagado a PRU"
-git tag -a v1.2.4 -m "Hotfix v1.2.4 propagado a DES"
+# 6. El banco toma release/v2.2.4 y sigue el flujo normal:
+#    PR a des → tag v2.2.4 → des → pru → prepro → pro
 
-git push origin --all --tags
+# 7. Eliminar hotfix branch
+git branch -d hotfix/arreglo-x
+git push origin --delete hotfix/arreglo-x
 ```
 
 ### 5.3 Principios para hotfixes
 
 1. **Siempre desde el tag del ambiente afectado** — no desde `develop`
-2. **Propagar hacia arriba y hacia abajo** — mergear a `main`, luego descender a `prepro` → `pru` → `des` → `develop`
-3. **Versionar con incremento de PATCH** — `v1.2.3` → `v1.2.4`
+2. **Verificar que develop necesita el fix** — antes de crear el nuevo release
+3. **Merge a develop primero** — garantiza merge limpio, develop ya tiene el fix cuando se crea el release
+4. **Nuevo release con incremento de PATCH** — `v2.2.3` → `v2.2.4`
+5. **Flujo completo** — el hotfix pasa por todos los ambientes: develop → des → pru → prepro → pro
+6. **No saltar ambientes** — el banco valida en cada paso
 
 ---
 
@@ -274,10 +351,13 @@ git push origin --all --tags
 
 | Tag                  | Significado                              |
 |----------------------|------------------------------------------|
-| `v1.2.3`             | Release entregado a DES                  |
+| `v1.2.3`             | Release final entregado a DES / Producción |
+| `v1.2.3-rc.1`        | Release candidate 1 — ajuste post-entrega en DES |
+| `v1.2.3-rc.2`        | Release candidate 2 — segundo ajuste en DES |
 | `v1.2.3-pru`         | Release promovido a PRU                  |
-| `v1.2.3-prepro`      | Release promovido a PREPRO                  |
+| `v1.2.3-prepro`      | Release promovido a PREPRO               |
 | `v1.2.3-pro`         | Release promovido a PRODUCCIÓN           |
+| `v1.2.4`             | Hotfix — nuevo release                   |
 
 ### 6.2 Estado actual por ambiente
 

@@ -61,6 +61,7 @@ El agente resuelve directamente usando tools ADO:
 | Listar backlogs | wit_list_backlogs | Proyecto/equipo |
 | Listar equipos | core_list_project_teams | Proyecto |
 | Capacidades equipo | work_get_team_capacity | Equipo/iteración |
+| Descarga un adjunto de un work item (imágenes, archivos)  |  wit_get_work_item_attachment      |  Siempre descargar adjunto y analizarlos |
 ## DELEGACION SKILLS (SOLO FLUJOS COMPLEJOS)
 | SOLICITUD | SKILL | DOMINIO | COMANDO |
 |-----------|-------|---------|---------|
