@@ -204,9 +204,19 @@ git push origin hotfix/arreglo-x
 
 Esperar aprobación y merge del PR.
 
-#### Paso 5 — Preguntar si entrega formal
+#### Paso 5 — Esperar merge del PR
 
-Una vez mergeado el PR a develop, preguntar al usuario:
+Una vez creado el PR, informar al usuario:
+
+```
+📌 PR creado: hotfix/arreglo-x → develop
+
+Esperando aprobación y merge...
+
+INFORMAME CUANDO EL PR SE ACEPTE PARA SEGUIR EL FLUJO.
+```
+
+**Cuando el usuario confirme que el PR se mergeó**, preguntar:
 
 ```
 ╔══════════════════════════════════════════════════════════╗
