@@ -187,34 +187,76 @@ git log develop --oneline | head -10
 # Confirmar que develop tiene el mismo código y necesita el fix
 ```
 
-#### Paso 4 — Merge a develop PRIMERO
-```bash
-git checkout develop
-git merge --no-ff hotfix/arreglo-x
-git push origin develop
-```
-Si develop está protegida → crear PR.
+#### Paso 4 — Merge a develop PRIMERO (via PR)
 
-#### Paso 5 — Nuevo release desde develop
+develop está protegida → crear PR:
+
 ```bash
+# Crear PR de hotfix → develop
+git checkout -b hotfix/arreglo-x
+git push origin hotfix/arreglo-x
+
+# Crear PR via ADO o gh cli
+# Título: "fix: <descripción> — hotfix desde v2.2.3-pro"
+# Source: hotfix/arreglo-x
+# Target: develop
+```
+
+Esperar aprobación y merge del PR.
+
+#### Paso 5 — Preguntar si entrega formal
+
+Una vez mergeado el PR a develop, preguntar al usuario:
+
+```
+╔══════════════════════════════════════════════════════════╗
+║  Hotfix mergeado a develop.                              ║
+║                                                        ║
+║  ¿Qué sigue?                                            ║
+║                                                        ║
+║  [S] Entrega formal — Ejecutar @handoff-ceiba           ║
+║      Genera release-notes, checklist, RESUMEN_ENTREGA   ║
+║      Crama release/vX.Y.Z con artefactos completos      ║
+║                                                        ║
+║  [N] Instrucciones simples                              ║
+║      Solo mostrar pasos al banco sin artefactos         ║
+║                                                        ║
+╚══════════════════════════════════════════════════════════╝
+```
+
+#### Paso 6a — Si elige [S]: Delegar a handoff-ceiba
+
+```
+Ejecutar: @handoff-ceiba
+
+Seleccionar: [1] Entregar release desde DEVELOP
+
+La skill handoff-ceiba se encarga de:
+  ├── Verificar que develop pasó pipeline
+  ├── Generar release-notes.md
+  ├── Crama release/vX.Y.Z
+  ├── Validar mismo commit (develop === release)
+  ├── Checklist de entrega completo
+  ├── RESUMEN_ENTREGA_*.txt
+  └── Instrucciones al banco
+```
+
+#### Paso 6b — Si elige [N]: Instrucciones simples
+
+```bash
+# Crear release desde develop
 git checkout develop && git pull
 git checkout -b release/v2.2.4
 git push origin release/v2.2.4
 ```
 
-#### Paso 6 — Limpieza
-```bash
-git branch -d hotfix/arreglo-x
-git push origin --delete hotfix/arreglo-x
-```
-
-#### Paso 7 — Resumen
+Mostrar resumen simple:
 ```
 ✅ Hotfix integrado — nuevo release creado.
 
 📦 Cambios:
   • Hotfix: hotfix/arreglo-x (desde tag v2.2.3-pro)
-  • develop tiene el fix via merge (--no-ff)
+  • develop tiene el fix via PR mergeado
   • Nuevo release: release/v2.2.4 (push a origin)
 
 📌 Flujo completo (el banco valida en cada paso):
@@ -224,9 +266,14 @@ git push origin --delete hotfix/arreglo-x
   4. prepro → pro → tag v2.2.4-pro → PRODUCCIÓN
 
 ⚠️ Notas:
-  • develop y release/v2.2.4 apuntan al mismo commit (merge limpio)
   • Si hay cambios de config, ejecutar @pr-config-audit
   • No saltar ambientes — el banco valida en cada uno
+```
+
+#### Paso 7 — Limpieza
+```bash
+git branch -d hotfix/arreglo-x
+git push origin --delete hotfix/arreglo-x
 ```
 
 ---
@@ -279,6 +326,8 @@ git push origin release/v2.2.3-rc.1
 5. **Flujo completo para hotfix.** develop → des → pru → prepro → pro. No saltar ambientes.
 6. **No crear tags.** Los tags los genera el banco al mergear a des.
 7. **Back-merge siempre.** Todo fix en release debe propagarse a develop.
+8. **develop protegida.** Merge a develop siempre via PR. Nunca push directo.
+9. **Delegar a handoff-ceiba.** Después de merge a develop, ofrecer entrega formal con artefactos completos.
 
 ## Gotchas
 
@@ -292,6 +341,7 @@ git push origin release/v2.2.3-rc.1
 
 | Skill | Qué hace | Cuándo |
 |-------|----------|--------|
+| `handoff-ceiba` | Entrega formal con artefactos | Opción 2: después de merge a develop (paso 6a) |
 | `handoff-ceiba` | Entrega inicial de release | Primera entrega a DES |
 | `pr-config-audit` | Genera CONFIG_ENTORNO_PR | Si el fix incluye cambios de config |
 | `ado-pipeline-analyzer` | Valida pipeline | Verificar que el fix no rompe build/tests |
