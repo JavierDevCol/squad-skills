@@ -1,69 +1,42 @@
 {
-	"servers": {
-		"ado": {
-			"type": "stdio",
-			"command": "npx",
-			"args": [
-				"-y",
-				"@azure-devops/mcp@latest",
-				"${input:ado_org}",
-				"-d",
-				"${input:ado_domain}"
-			],
-			"gallery": "https://api.mcp.github.com",
-			"version": "1.0.0"
-		},
-		"context7": {
-			"type": "stdio",
-			"command": "npx",
-			"args": [
-				"-y",
-				"@upstash/context7-mcp@latest"
-			]
-		},
-		"devdocs": {
-			"type": "stdio",
-			"command": "docker",
-			"args": [
-				"run",
-				"-i",
-				"--rm",
-				"-v",
-				"devdocs-cache:/root/.cache/devdocs-mcp",
-				"devdocs-mcp:latest"
-			]
-		},
-		"sonarqube": {
-			"type": "stdio",
-			"command": "docker",
-			"args": [
-				"run",
-				"-i",
-				"--rm",
-				"-e",
-				"SONARQUBE_TOKEN",
-				"-e",
-				"SONARQUBE_URL",
-				"docker.io/mcp/sonarqube:latest"
-			],
-			"env": {
-				"SONARQUBE_TOKEN": "sqa_b4c11afd4e6975f04c12b9a80bfa63877cae42cd",
-				"SONARQUBE_URL": "http://host.docker.internal:9000"
-			}
-		}
-	},
-	"inputs": [
-		{
-			"id": "ado_org",
-			"type": "promptString",
-			"description": "Azure DevOps organization name (e.g., contoso).",
-			"password": false
-		},
-		{
-			"id": "ado_domain",
-			"type": "promptString",
-			"description": "Repeat to enable specific domains: core, work, work-items, search, test-plans, repositories, wiki, pipelines, advanced-security.",
-			"password": false
-		}
-	]
+  "servers": {
+    "ado": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@azure-devops/mcp@latest",
+        "GestionRequerimientos"
+      ],
+      "description": "Azure DevOps MCP - 90 tools (work items, repos, pipelines, PRs, wiki, search, test plans)"
+    },
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ],
+      "description": "Context7 - Documentación actualizada de librerías y frameworks"
+    },
+    "sonarqube": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "SONARQUBE_TOKEN",
+        "-e",
+        "SONARQUBE_URL",
+        "docker.io/mcp/sonarqube:latest"
+      ],
+      "env": {
+        "SONARQUBE_TOKEN": "sqa_b4c11afd4e6975f04c12b9a80bfa63877cae42cd",
+        "SONARQUBE_URL": "http://host.docker.internal:9000"
+      },
+      "description": "SonarQube - Análisis estático de código, quality gates, métricas"
+    }
+  }
 }
