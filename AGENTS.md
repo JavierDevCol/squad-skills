@@ -1,24 +1,16 @@
 # Instrucciones del agente
 
-## 🧠 Modo Escepticismo Crítico (Abogado del Diablo) [OBLIGATORIO]
-
-Activa un estado de duda radical ante cualquier planteamiento del usuario, siguiendo estas directrices:
-
-### 1. Cuestionamiento de Premisas
-- **Mentalidad Cero Complacencia:** Nunca asumas que el usuario tiene la razón o que su solución es la definitiva, incluso si el código o argumento parece funcional a primera vista.
-- **Tela de Juicio:** Analiza cada propuesta buscando activamente sesgos de "camino feliz" (*happy path*), fallos de lógica, deuda técnica latente o problemas de escalabilidad.
-
-### 2. Protocolo de Refutación
-- **Validación con "Pero":** Si identificas un argumento débil, desmóntalo de manera fundamentada. Exige siempre al usuario justificar sus decisiones de diseño con preguntas socráticas (ej: *"¿Por qué elegir esta estructura y cómo afectará al rendimiento bajo carga?"*).
-- **Proponer Alternativas:** Por cada idea que pongas en duda, presenta obligatoriamente una contrapropuesta técnica (Plan B) detallando sus respectivos pros y contras.
+## 📊 Presentación de Work Items [OBLIGATORIO]
+Siempre que se listen Work Items (resultado de consultas, búsquedas o resúmenes), presentarlos en una **tabla ordenada** que incluya como mínimo:
+`ID` | `Tipo` | `Título` | `Estado` | `Horas completadas` (si aplica)
+Agrupar por estado: Active → New → Closed.
 
 ## Formato de Preguntas
 Toda interacción interactiva debe usar el snippet de **respuesta rápida**:
 > **🤷 [Pregunta]?**
 > - [Ícono] [Letra] **Texto de la opción**
 
-- **Cero Ambigüedad:** Si una instrucción no es clara, el agente debe detenerse y ofrecer alternativas.
-- **Contexto Rápido:** Antes de una pregunta, resumir brevemente la acción a realizar.
+**SIEMPRE ACUMULAR** preguntas al final.
 
 ## 🔄 Control de Cambios (Modo Nota)
 Siempre que el usuario solicite leer, modificar o crear archivos en el repositorio, incluye este recordatorio:
@@ -62,6 +54,16 @@ Todo commit subsiguiente debe seguir estrictamente la estructura: `<tipo>[ámbit
 ### 1. Directrices Universales (Aplican a todo comentario)
 - **Formato:** Todo comentario insertado en un Work Item (WI) debe estructurarse obligatoriamente usando sintaxis limpia de Markdown.
 - **Inserción Líquida:** Envía siempre el texto final al WI como **texto plano Markdown directo** (sin envolver el resultado en bloques de código contenedores), permitiendo que la plataforma interprete los estilos de forma nativa.
+- **Menciones ADO [OBLIGATORIO]:** Antes de publicar **cualquier comentario** (Caso A o Caso B), preguntar siempre:
+  > **🤷 ¿Deseas etiquetar a alguno de estos colaboradores en el comentario?**
+  > - 👤 **[A]** Edgar Alexander Torres Erazo → `@<96517b2d-3823-62fd-ae74-0872c1c9c3a9>`
+  > - 👤 **[L]** Lady Marcela Suarez Agudelo → `@<7c277620-4b79-652b-a18d-5d93dd85fff6>`
+  > - 👥 **[AL]** Ambos
+  > - 🔕 **[N]** Ninguno
+
+  Insertar las menciones seleccionadas **al inicio del comentario**, antes del cuerpo principal. Usar siempre el formato de ID de ADO `@<GUID>` para que la plataforma resuelva la mención nativa correctamente.
+
+- **Reasignación automática [OBLIGATORIO]:** Si el usuario selecciona etiquetar a **Alexander** (`[A]` o `[AL]`), inmediatamente después de publicar el comentario, **reasignar el WI** a Edgar Alexander Torres Erazo usando `wit_update_work_item` con el campo `System.AssignedTo = ettorres@bmm.com.co`. Notificar al usuario que el responsable fue actualizado.
 
 ---
 
@@ -110,11 +112,55 @@ Aplica este flujo específico cuando el usuario solicite un comentario de entreg
    > - ✅ [C] **Confirmar y continuar**
    > - ✏️ [E] **Editar datos**
 
-2. **Mención posterior:** Tras confirmar con `[C]`, consulta la etiqueta:
-   > **🤷 ¿Deseas etiquetar a Edgar Alexander Torres Erazo al inicio del comentario?**
-   > - 🔔 [S] **Sí, incluir mención** (Inserta `@<ettorres@bmm.com.co>` al inicio)
-   > - 🔕 [N] **No, saludo plano**
+2. **Mención posterior:** Tras confirmar con `[C]`, aplicar el flujo de menciones definido en **Directrices Universales §1** (preguntar por Alexander y/o Lady usando sus IDs de ADO).
 
+---
+
+## 🗂️ Bitácora Técnica del Proyecto [PROTOCOLO]
+
+Ruta raíz local: ` /Users/javier.garcia/Documents/BMM/BANCA_X_WHATSAPP/bitacora-tecnica/ `
+
+### 🚨 Reglas de Operación (Bitácora)
+
+1. **Lectura Condicional (Según la Intención):**
+   - **Consultas Generales (ADO):** Si solo se pide el estado, título o descripción del WI desde Azure DevOps, responde usando los datos de la plataforma sin leer archivos locales.
+   - **Análisis Técnico o Debugging:** Si se solicita solucionar un bug, desarrollar o investigar una falla, lee obligatoriamente el archivo `analisis.md` **Y todos los archivos `.txt` de la carpeta `LOGS/`** dentro del directorio del `[ID_WI]` antes de responder.
+
+2. **Escritura Al Grano [CRÍTICO]:** Al terminar la sesión, crea o actualiza `analisis.md` y guarda las trazas en `LOGS/`. El contenido de la bitácora debe ser **estrictamente técnico y directo**: registra datos puntuales, hashes, queries y hechos concretos en viñetas cortas. Prohíbe introducciones, resúmenes narrativos o explicaciones redundantes.
+
+3. **Sincronización Proactiva (Solo durante Análisis Técnico):** Esta regla **SOLO** se ejecuta si ya estás leyendo la bitácora local debido a una solicitud de análisis o desarrollo (Punto 1, Caso 2). Si detectas que el estado real en ADO cambió respecto a lo escrito en el `analisis.md` local, alerta al usuario:
+   > ⚠️ **Divergencia detectada:** El PR #[Número] figura como MERGEADO en ADO, pero está PENDIENTE en local.
+   > **🤷 ¿Actualizo el archivo `analisis.md` con los nuevos datos de ADO?**
+   > - 🔄 [S] **Sí, sincronizar bitácora local**
+   > - ❌ [N] **No, mantener archivo sin cambios**
+
+
+### 📄 Estructura Base: `analisis.md`
+```markdown
+# 🔍 Análisis: WI #[ID_WI] — [Título Corto de la Falla]
+- **Fecha:** YYYY-MM-DD
+- **Microservicio / Componente:** [Nombre]
+- **Rama de Trabajo:** ` [nombre_rama] `
+
+## 🧠 Causa Raíz Detectada
+[Explicación concisa de por qué fallaba el sistema en el código o base de datos].
+
+## 🛠️ Acciones Realizadas (Historial de Cambios)
+- **Cambios en Código:** [Mapeo de archivos modificados / Firmas / Capa hexagonal]
+- **Commits Ejecutados:**
+  - `[hash_1]` — fix: [descripción]
+  - `[hash_2]` — refactor: [descripción]
+- **PRs Creados / Mergeados:**
+  - **# [Número PR]** — `[Origen]` ➔ `[Destino]` ([Estado: ✅ Mergeado / 🟡 Pendiente])
+
+## 🪵 Evidencias y Consultas de Diagnóstico
+- **Logs de Error:** Encontrados en `LOGS/[nombre_log].txt`
+- **Queries Útiles:** [Pega aquí los comandos SQL o scripts bash usados para aislar el problema]
+[Script o query limpia]
+
+## ⏳ Próximos Bloqueantes (Dependencias)
+- [ ] [Aprobaciones de terceros, despliegues pendientes en DES por infraestructura o pruebas de QA].
+```
 ---
 
 ### 3. Caso B: Comentarios Generales y Técnicos
@@ -125,3 +171,4 @@ Aplica este flujo para cualquier otra anotación, duda, tarea o actualización e
    > **🤷 ¿El formato de este comentario es correcto antes de publicarlo?**
    > - ✅ [C] **Confirmar e insertar comentario**
    > - ✏️ [E] **Editar el contenido**
+3. **Mención posterior:** Tras confirmar con `[C]`, aplicar el flujo de menciones definido en **Directrices Universales §1** (preguntar por Alexander y/o Lady usando sus IDs de ADO).131735

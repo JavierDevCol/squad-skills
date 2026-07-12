@@ -30,8 +30,8 @@ La skill **no lee `config_consultas.json` directamente**. Todo el contexto es in
 Si el contexto no fue pasado, solicita al usuario que re-invoque desde el agente principal.
 
 Los estándares del equipo se encuentran en:
-- `[base_reports_path]/architecture/coding-standards.md` — estándares principales
-- `[base_reports_path]/architecture/architecture_[nombre_del_repo].md` — guía de arquitectura específica del repositorio del PR
+- `/Users/javier.garcia/Documents/BMM/BANCA_X_WHATSAPP/Doc_BancaPorWhatsapp/docs/architecture/coding-standards.md` — estándares principales
+- `/Users/javier.garcia/Documents/BMM/BANCA_X_WHATSAPP/Doc_BancaPorWhatsapp/docs/architecture/architecture_[nombre_del_repo].md` — guía de arquitectura específica del repositorio del PR
 
 ## Estándar de rutas
 
